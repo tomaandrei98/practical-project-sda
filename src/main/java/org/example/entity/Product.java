@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Data
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = "orders")
 public class Product extends BaseEntity {
     @Column(name = "title")
     @NonNull

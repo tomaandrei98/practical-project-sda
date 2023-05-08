@@ -1,9 +1,15 @@
 package org.example.controller;
 
 import org.example.entity.*;
+import org.example.service.OrderService;
+import org.example.service.ProductService;
+import org.example.service.UserService;
 import org.example.service.impl.OrderServiceImpl;
 import org.example.service.impl.ProductServiceImpl;
 import org.example.service.impl.UserServiceImpl;
+import org.example.validator.exception.OrderNotFoundException;
+import org.example.validator.exception.ProductNotFoundException;
+import org.example.validator.exception.UserNotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -11,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainController {
-    private static UserServiceImpl userService = new UserServiceImpl();
-    private static ProductServiceImpl productService = new ProductServiceImpl();
-    private static OrderServiceImpl orderService = new OrderServiceImpl();
+    private static UserService userService = new UserServiceImpl();
+    private static ProductService productService = new ProductServiceImpl();
+    private static OrderService orderService = new OrderServiceImpl();
 
     public static void main(String[] args) {
 //        addUser();
@@ -22,26 +28,23 @@ public class MainController {
 //        System.out.println(getUserById(1));
 //        deleteUser(getUserById(3));
 //        System.out.println(getUserById(2));
-//        userService.findAllUsers().forEach(System.out::println);
 //        updateAddressForUserWithId(1, "x", "y", "abc", 1000);
 //        findAllUsers().forEach(System.out::println);
 
 //        addProduct();
-//        updateProduct(4, 6, "name6upd", "desc6upd", 50);
+//        updateProduct(1, 3, "name3upd", "desc3upd", 50);
 //        System.out.println(getProductById(2));
-//        deleteProduct(4, getProductById(6));
+//        deleteProduct(1, getProductById(2));
 //        System.out.println(getProductByTitle("title2"));
 //        productService.findAllProducts().forEach(System.out::println);
 //        System.out.println(getProductByType(ProductType.SPORT));
-//        getProductsWithPriceBetween(12, 1200).forEach(System.out::println);
+//        getProductsWithPriceBetween(25, 1200).forEach(System.out::println);
 
 //        addOrder();
-//        updateOrder(2, OrderStatus.PENDING);
+//        updateOrder(2, OrderStatus.SUCCESS);
 //        System.out.println(getOrderById(1));
-//        getOrdersByClient(1).forEach(System.out::println);
+//        getOrdersByClient(2).forEach(System.out::println);
 //        orderService.findAllOrders().forEach(System.out::println);
-
-//        addOrder();
 //        System.out.println(getTotalPriceByOrderId(1));
 //        System.out.println(userService.getTotalSumForUserById(1));
     }
@@ -55,7 +58,8 @@ public class MainController {
     }
 
     private static User getUserById(int id) {
-        return userService.findUserById(id).orElseThrow();
+        return userService.findUserById(id)
+                .orElseThrow(() -> new UserNotFoundException(String.format("no user with id = %s", id)));
     }
 
     private static void addUser() {
@@ -82,22 +86,26 @@ public class MainController {
 
 
     private static void addProduct() {
-        Product product5 = new Product("title5", "desc5", 20, ProductType.FASHION);
-        productService.saveProduct(1, product5);
-//        Product product2 = new Product("title2", "desc2", 40, ProductType.SPORT);
-//        productService.saveProduct(1, product2);
-//        Product product3 = new Product("title3", "desc3", 60, ProductType.FASHION);
-//        productService.saveProduct(1, product3);
-//        Product product4 = new Product("title4", "desc4", 100, ProductType.AUTO);
-//        productService.saveProduct(1, product4);
+        Product product1 = new Product("title1", "desc1", 20, ProductType.FASHION);
+        productService.saveProduct(1, product1);
+        Product product2 = new Product("title2", "desc2", 40, ProductType.SPORT);
+        productService.saveProduct(1, product2);
+        Product product3 = new Product("title3", "desc3", 60, ProductType.FASHION);
+        productService.saveProduct(1, product3);
+        Product product4 = new Product("title4", "desc4", 100, ProductType.AUTO);
+        productService.saveProduct(1, product4);
+        Product product5 = new Product("title5", "desc5", 100, ProductType.AUTO);
+        productService.saveProduct(2, product5);
     }
 
     private static Product getProductById(int id) {
-        return productService.findProductById(id).orElseThrow();
+        return productService.findProductById(id)
+                .orElseThrow(() -> new ProductNotFoundException(String.format("no product with id %s", id)));
     }
 
     private static Product getProductByTitle(String title) {
-        return productService.findProductByTitle(title).orElseThrow();
+        return productService.findProductByTitle(title)
+                .orElseThrow(() -> new ProductNotFoundException(String.format("no product with title %s", title)));
     }
 
     private static List<Product> getProductByType(ProductType productType) {
@@ -118,9 +126,9 @@ public class MainController {
 
 
     private static void addOrder() {
-        Order order5 = new Order(
-                "username5",
-                "address5",
+        Order order1 = new Order(
+                "username1",
+                "address1",
                 LocalDate.of(2022, Month.APRIL, 10),
                 OrderStatus.PENDING);
 
@@ -128,31 +136,31 @@ public class MainController {
         productsId1.add(1);
         productsId1.add(1);
         productsId1.add(2);
-        orderService.saveOrder(1, order5, productsId1);
+        orderService.saveOrder(1, order1, productsId1);
 
-//        Order order2 = new Order(
-//                "username2",
-//                "address2",
-//                LocalDate.now(),
-//                OrderStatus.PENDING);
-//
-//        List<Integer> productsId2 = new ArrayList<>();
-//        productsId2.add(1);
-//        productsId2.add(2);
-//        productsId2.add(3);
-//        orderService.saveOrder(2, order2, productsId2);
-//
-//        Order order3 = new Order(
-//                "username3",
-//                "address3",
-//                LocalDate.now(),
-//                OrderStatus.PENDING);
-//
-//        List<Integer> productsId3 = new ArrayList<>();
-//        productsId3.add(1);
-//        productsId3.add(3);
-//        productsId3.add(3);
-//        orderService.saveOrder(3, order3, productsId3);
+        Order order2 = new Order(
+                "username2",
+                "address2",
+                LocalDate.now(),
+                OrderStatus.PENDING);
+
+        List<Integer> productsId2 = new ArrayList<>();
+        productsId2.add(1);
+        productsId2.add(2);
+        productsId2.add(3);
+        orderService.saveOrder(2, order2, productsId2);
+
+        Order order3 = new Order(
+                "username3",
+                "address3",
+                LocalDate.now(),
+                OrderStatus.PENDING);
+
+        List<Integer> productsId3 = new ArrayList<>();
+        productsId3.add(1);
+        productsId3.add(3);
+        productsId3.add(3);
+        orderService.saveOrder(3, order3, productsId3);
     }
 
     private static void updateOrder(int orderId, OrderStatus orderStatus) {
@@ -160,7 +168,8 @@ public class MainController {
     }
 
     private static Order getOrderById(int id) {
-        return orderService.findOrderById(id).orElseThrow();
+        return orderService.findOrderById(id)
+                .orElseThrow(() -> new OrderNotFoundException(String.format("not found order with id = %s", id)));
     }
 
     private static List<Order> getOrdersByClient(int id) {

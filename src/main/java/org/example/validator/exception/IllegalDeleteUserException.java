@@ -2,8 +2,8 @@ package org.example.validator.exception;
 
 import org.example.validator.exception.base.StoreException;
 
-public class ValidatorException extends StoreException {
-    public ValidatorException(String message) {
+public class IllegalDeleteUserException extends StoreException {
+    public IllegalDeleteUserException(String message) {
         super(message);
     }
 }

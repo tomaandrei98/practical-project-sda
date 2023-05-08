@@ -1,4 +1,4 @@
-package org.example.validator.exception;
+package org.example.validator.exception.base;
 
 public class StoreException extends RuntimeException {
     public StoreException(String message) {

@@ -6,6 +6,7 @@ import org.example.entity.Product;
 import org.example.entity.ProductType;
 import org.example.entity.Role;
 import org.example.validator.Validator;
+import org.example.validator.exception.IllegalDeleteProductException;
 import org.example.validator.exception.ValidatorException;
 import org.example.validator.impl.ProductValidator;
 import org.example.validator.impl.UserRoleValidator;
@@ -84,6 +85,7 @@ public class ProductDAOImpl extends BaseDAO implements ProductDAO {
         Transaction transaction = null;
         try {
             userRoleValidator.validate(userId);
+            productValidator.validate(product);
             try {
                 transaction = currentSession.beginTransaction();
                 currentSession.remove(product);
@@ -95,7 +97,7 @@ public class ProductDAOImpl extends BaseDAO implements ProductDAO {
                     transaction.rollback();
                 }
             }
-        } catch (ValidatorException e) {
+        } catch (ValidatorException | IllegalDeleteProductException e) {
             System.out.println(e.getMessage());
         }
         return Optional.empty();

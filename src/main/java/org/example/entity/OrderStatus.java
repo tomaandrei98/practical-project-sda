@@ -2,5 +2,6 @@ package org.example.entity;
 
 public enum OrderStatus {
     PENDING,
-    SUCCESS
+    SUCCESS,
+    CANCELED
 }

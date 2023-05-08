@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = "orders")
 public class User extends BaseEntity {
     @Column(name = "login")
     @NonNull
@@ -33,7 +33,7 @@ public class User extends BaseEntity {
     @NonNull
     private Address address;
 
-    @OneToMany()
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "client_id")
     private List<Order> orders = new ArrayList<>();
 }
